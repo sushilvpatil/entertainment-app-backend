@@ -13,7 +13,7 @@ export const registerUser = async (req, res) => {
     const { name, email, password } = req.body;
 
     // Validate Input
-    if (!name || !email || !password) {
+    if (  !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -75,3 +75,4 @@ export const loginUser = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+

@@ -7,6 +7,7 @@ const authMiddleware = async (req, res, next) => {
         const authHeader = req.headers["authorization"];
         // ✅ 2. Check if token is present
         if (!authHeader) {
+            
             return res.status(401).json({ message: "Unauthorized" });
         }
         const token = authHeader.split(" ")[1];
@@ -16,6 +17,7 @@ const authMiddleware = async (req, res, next) => {
         // ✅ 5. Check if user exists in DB
         const user = await User.findById(decoded.userId).select("-password");
         if (!user) {
+            console.log("jump to unauthorised")
             return res.status(401).json({ message: "Unauthorized - User Not Found" });
         }
 

@@ -9,5 +9,4 @@ res.json({message: "User Profile", user: req.user});
 });
 
 router.put("/update", authMiddleware, updateUserProfile);
-
 export default router;

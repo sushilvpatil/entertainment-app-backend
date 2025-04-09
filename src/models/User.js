@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    required: false,
     trim: true,
   },
   email: {
@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 6,
   },
+  profileImage: {
+    type: String, // URL or file path for the profile image
+    required: false,
+  },
 });
 
 // Hash password before saving
@@ -26,6 +30,7 @@ userSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, 10);
   next();
 });
+
 
 // Compare password for login
 userSchema.methods.matchPassword = async function (enteredPassword) {
