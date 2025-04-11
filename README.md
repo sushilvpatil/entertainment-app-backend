@@ -1,109 +1,134 @@
-# Entertainment App Backend
+🎬 Entertainment App Backend
+This is the backend service for the Entertainment App, a full-stack media platform that allows users to explore trending movies and TV shows, bookmark their favorites, and manage their profile. It integrates with TMDB for real-time media data.
 
-This is the backend service for the **Entertainment App**, which provides APIs for user authentication, managing bookmarks, and fetching movie/TV show details. The backend is built using **Node.js**, **Express**, and **MongoDB**, and integrates with **TMDB (The Movie Database)** for fetching trending and detailed media information.
+Built with:
 
----
+Node.js + Express.js
 
-## Features
+MongoDB with Mongoose
 
-- **User Authentication**:
-  - Register and login users with secure password hashing.
-  - JWT-based authentication for protected routes.
+JWT Authentication
 
-- **Bookmarks**:
-  - Add, retrieve, and delete bookmarks for movies and TV shows.
-
-- **Media Information**:
-  - Fetch trending movies and TV shows.
-  - Search for movies and TV shows.
-  - Get detailed information about movies and TV shows, including cast details.
-
-- **Swagger Documentation**:
-  - Comprehensive API documentation available at `/api-docs`.
-
----
-
-## Project Structure
-
-entertainment-app-backend
-├── src
-│ ├── controllers\ # Business logic for handling requests │ ├── middleware\ # Authentication and other middleware │ ├── models\ # Mongoose models for MongoDB │ ├── routes\ # API route definitions │ ├── config\ # Database and environment configurations ├── docs
-│ └── swagger.yaml # Swagger API documentation ├── index.js # Main entry point for the application ├── package.json # Project dependencies and scripts ├── .env # Environment variables (excluded from version control)
+Swagger API Docs
 
 
----
+🚀 Features
+🔐 User Authentication
+Register and login with hashed passwords.
 
-## API Documentation
+Secure JWT token-based authentication for protected routes.
 
-The API is documented using **Swagger**. You can access the documentation by running the server and navigating to:
+🔖 Bookmarks
+Add, retrieve, and delete bookmarked movies/TV shows.
+
+Each bookmark is associated with a logged-in user.
+
+📺 Media Information (via TMDB)
+Get trending movies and TV shows.
+
+Search movies/TV by title.
+
+Get detailed information including cast
+
+📄 API Documentation
+Live Swagger docs available at:
+
+http://localhost:5000/api-docs
+
+or on deployment:
+https://ecommerce-backend-5-ocnz.onrender.com/api-docs
+
+
+📁 Project Structure
+
+entertainment-app-backend/
+│
+├── src/
+│   ├── controllers/      # Business logic for handling requests
+│   ├── middleware/       # JWT and other middlewares
+│   ├── models/           # Mongoose models
+│   ├── routes/           # All route handlers
+│   ├── config/           # Environment and DB config
+│
+├── docs/
+│   └── swagger.yaml      # Full API documentation in OpenAPI format
+│
+├── index.js              # Server entry point
+├── .env                  # Environment variables (excluded from Git)
+├── package.json          # Project metadata and dependencies
+
+
+nstallation & Setup
+✅ Prerequisites
+Node.js (v14 or higher)
+
+MongoDB (local or cloud like MongoDB Atlas)
+
+TMDB API Key (sign up here)
+
+📌 Environment Variables
+Create a .env file in the root:
+PORT=5000
+MONGO_URI=<your_mongodb_connection_string>
+JWT_SECRET=<your_jwt_secret>
+TMDB_API_KEY=<your_tmdb_api_key>
+TMDB_ACCESS_TOKEN=<your_tmdb_access_token>
+TMDB_BASE_URL=https://api.themoviedb.org/3
+
+Install Dependencies
+
+npm install
+
+Start Server
+
+npm run dev
+
+The server will be running at:
+
+http://localhost:5000
+
+
+📚 API Overview
+🧑‍💼 Authentication
+Method	Endpoint	Description
+POST	/auth/register	Register a new user
+POST	/auth/login	Login and get a token
+
+
+User Profile
+Method	Endpoint	Description
+GET	/users/profile	Get profile info of the logged-in user
+PUT	/users/update	Update profile (name, email, password)
+
+🔖 Bookmarks
+Method	Endpoint	Description
+POST	/bookmark	Add a bookmark
+GET	/bookmarks	Get all bookmarks
+DELETE	/bookmarks/{itemId}	Remove a bookmark (by TMDB ID)
+
+ Movies (via TMDB)
+Method	Endpoint	Description
+GET	/tmdb/movies/trending	Get trending movies
+GET	/tmdb/movies/details/{id}	Get movie details
+GET	/tmdb/movies/{movieId}/casts	Get movie cast
+
+
+📺 TV Shows (via TMDB)
+Method	Endpoint	Description
+GET	/tmdb/tv/trending	Get trending TV shows
+GET	/tmdb/tv/details/{id}	Get TV show details
+GET	/tmdb/tv-series/{id}/casts	Get cast for a TV show
+
+
+http://localhost:5000/api-docs
+
 
 https://ecommerce-backend-5-ocnz.onrender.com/api-docs
 
 
+🤝 Contributing
+We welcome contributions!
+Feel free to open an issue or submit a pull request for enhancements or bug fixes.
 
-### How to Use the Swagger Documentation
-
-1. Start the server:
-   ```bash
-   npm run dev
-
-
-   http://localhost:5000/api-docs
-
-
-
-   Installation and Setup
-Prerequisites
-Node.js (v14 or higher)
-MongoDB (local or cloud instance)
-TMDB API Key (for fetching movie/TV data)
-Steps to Run the Project
-Clone the repository:
-git clone https://github.com/your-username/entertainment-app-backend.git
-
-cd entertainment-app-backend
-
-npm install
-
-PORT=5000
-ongodbMONGO_URI=<your-m-connection-string>
-JWT_SECRET=<your-jwt-secret>
-TMDB_API_KEY=<your-tmdb-api-key>
-TMDB_ACCESS_TOKEN=<your-tmdb-access-token>
-TMDB_BASE_URL=https://api.themoviedb.org/3
-
- start the server
-npm start or npm run dev
-
-The server will run at:
-http://localhost:5000
-
-
-vailable APIs
-Authentication
-POST /auth/register: Register a new user.
-POST /auth/login: Log in a user and get a JWT token.
-User Profile
-GET /users/profile: Get the authenticated user's profile.
-PUT /users/update: Update the authenticated user's profile (name, email, profile image, or password).
-
-Bookmarks
-POST /bookmark: Add a new bookmark.
-GET /bookmarks: Get all bookmarks for the authenticated user.
-DELETE /bookmarks/{itemId}: Delete a bookmark by its TMDB ID.
-Movies
-GET /tmdb/movies/trending: Get trending movies.
-GET /tmdb/movies/details/{id}: Get details of a specific movie.
-GET /tmdb/movies/{movieId}/casts: Get cast details for a specific movie.
-
-Movies
-GET /tmdb/movies/trending: Get trending movies.
-GET /tmdb/movies/details/{id}: Get details of a specific movie.
-GET /tmdb/movies/{movieId}/casts: Get cast details for a specific movie.
-TV Shows
-GET /tmdb/tv/trending: Get trending TV shows.
-GET /tmdb/tv/details/{id}: Get details of a specific TV show.
-GET /tmdb/tv-series/{id}/casts: Get cast details for a specific TV show.
-
-Contributing
-Contributions are welcome! If you find any issues or have suggestions for improvement, feel free to open an issue or submit a pull request.
+ License
+This project is licensed under the MIT License.
