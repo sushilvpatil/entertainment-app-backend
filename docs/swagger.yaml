@@ -1,0 +1,309 @@
+
+openapi: 3.0.0
+info:
+  title: Entertainment App API
+  version: 1.0.0
+  description: |
+    This is the full documentation for the Entertainment App Backend API.
+
+    🔐 Most routes require JWT authentication. Include this header:
+    Authorization: Bearer <your_token>
+
+    ✅ ID References:
+    - TMDB ID is used for media (e.g., itemId in bookmarks).
+    - MongoDB ObjectID is used internally for user, bookmark, and media records.
+
+servers:
+  - url: https://entertainment-app-backend-bapu.onrender.com/api
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
+
+paths:
+  /auth/register:
+    post:
+      summary: Register a new user
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: User registered successfully
+        '400':
+          description: Email already in use or validation failed
+
+  /auth/login:
+    post:
+      summary: Login user
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+        '400':
+          description: Invalid credentials
+
+  /users/profile:
+    get:
+      summary: Get current user profile
+      tags: [User]
+      responses:
+        '200':
+          description: Profile fetched
+        '401':
+          description: Unauthorized
+
+  /users/update:
+    put:
+      summary: Update user profile
+      tags: [User]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                profileImage:
+                  type: string
+                currentPassword:
+                  type: string
+                newPassword:
+                  type: string
+      responses:
+        '200':
+          description: Profile updated successfully
+        '400':
+          description: Password validation failed
+
+  /bookmark:
+    post:
+      summary: Add a bookmark
+      tags: [Bookmarks]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [itemId, itemType, title]
+              properties:
+                itemId:
+                  type: string
+                itemType:
+                  type: string
+                  enum: [movie, tv]
+                title:
+                  type: string
+                posterPath:
+                  type: string
+      responses:
+        '201':
+          description: Bookmark created
+        '400':
+          description: Missing required fields
+        '409':
+          description: Already bookmarked
+
+  /bookmarks:
+    get:
+      summary: Get all bookmarks for user
+      tags: [Bookmarks]
+      responses:
+        '200':
+          description: List of bookmarks
+        '401':
+          description: Unauthorized
+
+  /bookmarks/{itemId}:
+    delete:
+      summary: Delete a bookmark
+      tags: [Bookmarks]
+      parameters:
+        - in: path
+          name: itemId
+          required: true
+          schema:
+            type: string
+          description: TMDB ID of the bookmarked media
+      responses:
+        '200':
+          description: Bookmark deleted
+        '404':
+          description: Bookmark not found
+
+  /tmdb/movies/trending:
+    get:
+      summary: Get trending movies
+      tags: [Movies]
+      responses:
+        '200':
+          description: Trending movie list
+
+  /tmdb/tv/trending:
+    get:
+      summary: Get trending TV shows
+      tags: [TV]
+      responses:
+        '200':
+          description: Trending TV show list
+
+  /tmdb/search/movies:
+    get:
+      summary: Search movies
+      tags: [Search]
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Matching movie list
+
+  /tmdb/search/tv:
+    get:
+      summary: Search TV shows
+      tags: [Search]
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Matching TV show list
+
+  /tmdb/movies/details/{id}:
+    get:
+      summary: Get movie details
+      tags: [Movies]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: TMDB movie ID
+      responses:
+        '200':
+          description: Movie details
+        '404':
+          description: Movie not found
+
+  /tmdb/tv/details/{id}:
+    get:
+      summary: Get TV show details
+      tags: [TV]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: TMDB TV ID
+      responses:
+        '200':
+          description: TV details
+        '404':
+          description: TV not found
+
+  /tmdb/search/movie-url:
+    get:
+      summary: Get movie URL
+      tags: [Movies]
+      parameters:
+        - in: query
+          name: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Movie URL
+
+  /tmdb/movies/{movieId}/casts:
+    get:
+      summary: Get movie casts
+      tags: [Movies]
+      parameters:
+        - in: path
+          name: movieId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Cast list
+
+  /tmdb/search/tv-series:
+    get:
+      summary: List TV series
+      tags: [TV]
+      responses:
+        '200':
+          description: TV series list
+
+  /tmdb/tv-series/{id}/url:
+    get:
+      summary: Get TV series URL
+      tags: [TV]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: TV series URL
+
+  /tmdb/tv-series/{id}/casts:
+    get:
+      summary: Get TV series cast
+      tags: [TV]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: TV cast list

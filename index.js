@@ -8,7 +8,10 @@ import userRoutes from "./src/routes/userRoutes.js";
 import movieRoutes from "./src/routes/movieRoutes.js";
 import bookmarkRoutes from "./src/routes/bookmarkRoutes.js";
 import mediaRoutes from "./src/routes/mediaRoutes.js";
+import YAML from "yamljs";
+import swaggerUi from "swagger-ui-express";
 dotenv.config();
+const swaggerDocument = YAML.load("./docs/swagger.yaml");
 const app = express();
 // Connect to MongoDB
 connectDB()
@@ -20,6 +23,7 @@ app.use(cors({
 }));
 
 // Routes
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/tmdb", movieRoutes);
@@ -27,3 +31,6 @@ app.use("/api", bookmarkRoutes);
 app.use("/api/media", mediaRoutes);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+
+
+// Other middleware and routes
